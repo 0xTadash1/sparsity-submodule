@@ -48,6 +48,14 @@ git submodule absorbgitdirs
 git -C test/craftinginterpreters sparse-checkout set test/ tool/
 ```
 
+## `git submodule absorbgitdirs`
+
+After `git submodule deinit`, we can `checkout` the sparsity submodules again by simply
+`git submodule update --init --filter=blob:none --depth=1 test/craftinginterpreters`.
+
+This is because `git submodule absorbgitdirs` records the `sparse-checkout` configuration
+under `.git/` in the superprojects.
+
 ## cf.
 
 - <https://stackoverflow.com/questions/600079/how-do-i-clone-a-subdirectory-only-of-a-git-repository>
