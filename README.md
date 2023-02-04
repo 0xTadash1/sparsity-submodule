@@ -1,13 +1,13 @@
 # Sparsity Submodule
 
-My practice about the combination of git `submodule` & `sparse-checkout`.
-To bringing the specific directories/files from a foreighn repository.
+My practice on the combination of git `submodule` & `sparse-checkout`.
+How to bring any directory/file from a foreign repository.
 
 ## At First (setup)
 
 At here, I would like to use `{test/,tool/}` from `munificent/craftinginterpreters`.
 
-```bash
+```sh
 git clone --depth=1 --filter=blob:none --sparse \
 	https://github.com/munificent/craftinginterpreters.git \
 	test/craftinginterpreters
@@ -18,19 +18,34 @@ git submodule add \
 
 # Move `test/craftinginterpreters/.git/` to `.git/`
 git submodule absorbgitdirs
+#
+# > A repository that was cloned independently and later added as
+# > a submodule or old setups have the submodules git directory
+# > inside the submodule instead of embedded into the
+# > superprojects git directory.
+#
+# -- <https://man7.org/linux/man-pages/man1/git-submodule.1.html>
 
 git -C test/craftinginterpreters sparse-checkout set test/ tool/
 ```
 
-## After the Second time
+## After the Second time (clone)
 
-```bash
-git clone --recursive https://example.com/repo-with-sub-modules
+```sh
+# No
 
-# or, without `--recursive`
+git clone --recursive https://github.com/0xTadash1/sparsity-submodule
 
-git clone https://example.com/repo-with-sub-modules
-git submodule update --init
+# Instead
+
+git clone https://github.com/0xTadash1/sparsity-submodule
+
+git submodule init
+git clone --depth=1 --filter=blob:none --sparse \
+	https://github.com/munificent/craftinginterpreters.git \
+	test/craftinginterpreters
+git submodule absorbgitdirs
+git -C test/craftinginterpreters sparse-checkout set test/ tool/
 ```
 
 ## cf.
